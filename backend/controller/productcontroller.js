@@ -41,4 +41,60 @@ const getproduct=async(req,res)=>{
     }
 }
 
-module.exports={createproduct,getproduct}
+const getproductbyid=async(req,res)=>{
+    try{
+        let id=req.params.id;
+        if(!id){
+            return res.status(400).json({errro:'id required'})
+        }
+        
+        const product=await productmodel.findById(id)
+        if(!product){
+            
+            
+            return res.status(400).json({error:'product not found'})
+
+        }
+        return res.status(200).json({message:'product fetched successfully',product:product})
+    }catch(error){
+        console.log(error   )
+        return res.status(500).json({error:'internal server'})
+    }   
+}
+
+const updateproduct=async(req,res)=>{
+    try{
+        const id=req.params.id;
+        if(!id){
+            return res.status(400).json({error:'id is required'})
+        }
+
+        const update=await productmodel.findByIdAndUpdate(id,req.body)
+        if(!update){
+            return res.status(404).json({error:'product not found'})
+        }
+        return res.status(200).json({message:'product update successfully',update:update})
+
+    }catch(error){
+        return res.status(500).json({error:'internal server error'})
+    }
+}
+
+const deletedproduct=async(req,res)=>{
+    try{
+        const id=req.params.id;
+        if(!id){
+            return res.status(400).json({error:'id is required'})
+        }
+
+        const deleted=await productmodel.findByIdAndDelete(id)
+        if(!deleted){
+            return res.status(404).json({error:'product not found'})
+        }
+        return res.status(200).json({message:'product deleted successfully',delete:deleted})
+
+    }catch(error){
+        return res.status(500).json({error:'internal server error'})
+    }
+}
+module.exports={createproduct,getproduct,getproductbyid,updateproduct,deletedproduct}
