@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stylish Glass Login/Register</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .container {
+      perspective: 1200px;
+    }
+
+    .card {
+      width: 400px;
+      height: 520px;
+      position: relative;
+      transition: transform 1s;
+      transform-style: preserve-3d;
+    }
+
+    .card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .form {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      padding: 40px 30px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      backface-visibility: hidden;
+    }
+
+    .form h2 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 25px;
+    }
+
+    .input-container {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .input-container i {
+      position: absolute;
+      top: 50%;
+      left: 12px;
+      transform: translateY(-50%);
+      color: #888;
+    }
+
+    .form input {
+      width: 100%;
+      padding: 12px 12px 12px 40px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .form input::placeholder {
+      color: #eee;
+    }
+
+    .form input:focus {
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid #fff;
+    }
+
+    .form button {
+      margin-top: 15px;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(to right, #43cea2, #185a9d);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .form button:hover {
+      transform: scale(1.03);
+    }
+
+    .toggle-container {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .toggle-container button {
+      background: transparent;
+      border: 2px solid #fff;
+      color: white;
+      padding: 8px 18px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .toggle-container button:hover {
+      background: white;
+      color: #222;
+    }
+
+    .back {
+      transform: rotateY(180deg);
+    }
+
+    .message {
+      margin-top: 10px;
+      text-align: center;
+      color: #f1f1f1;
+      font-size: 14px;
+    }
+
+    #userList {
+      display: none;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 12px;
+      color: white;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .user-item {
+      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .user-item button {
+      background: transparent;
+      color: white;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+    }
+
+    #logoutBtn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: crimson;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="card" id="card">
+      <div class="form front">
+        <h2>Login</h2>
+        <div class="input-container">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="loginEmail" placeholder="Email" />
+        </div>
+        <div class="input-container">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="loginPassword" placeholder="Password" />
+        </div>
+        <button onclick="loginUser()">Login</button>
+        <div class="toggle-container">
+          <button onclick="flipCard()">Switch to Register</button>
+        </div>
+        <div class="message" id="loginMessage"></div>
+      </div>
+
+      <div class="form back">
+        <h2>Register</h2>
+        <div class="input-container">
+          <i class="fas fa-user"></i>
+          <input type="text" id="registerUsername" placeholder="Username" />
+        </div>
+        <div class="input-container">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="registerEmail" placeholder="Email" />
+        </div>
+        <div class="input-container">
+          <i class="fas fa-lock"></i>
+          <input type="password" id="registerPassword" placeholder="Password" />
+        </div>
+        <button onclick="registerUser()">Register</button>
+        <div class="toggle-container">
+          <button onclick="flipCard()">Switch to Login</button>
+        </div>
+        <div class="message" id="registerMessage"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="userList"></div>
+
+  <script>
+    const card = document.getElementById('card');
+    const userList = document.getElementById('userList');
+
+    function flipCard() {
+      card.classList.toggle('flipped');
+    }
+
+    async function loginUser() {
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      const loginMessage = document.getElementById("loginMessage");
+
+      try {
+        const res = await fetch("http://localhost:4000/api/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          document.querySelector(".container").style.display = "none";
+          userList.style.display = "block";
+          fetchUsers();
+        } else {
+          loginMessage.textContent = data.error || "Login failed";
+        }
+      } catch (err) {
+        loginMessage.textContent = "Server error";
+      }
+    }
+
+    async function fetchUsers() {
+      const res = await fetch("http://localhost:4000/api/getusers");
+      const data = await res.json();
+      if (res.ok) {
+        userList.innerHTML = '<h2>All Users</h2>' +
+          data.users.map(user => `
+            <div class="user-item">
+              <span><strong>${user.username}</strong> - ${user.email}</span>
+              <button onclick="editUser('${user._id}', '${user.username}', '${user.email}')">
+                <i class="fas fa-edit"></i>
+              </button>
+            </div>
+          `).join('') +
+          '<button id="logoutBtn" onclick="logout()">Logout</button>';
+      }
+    }
+
+    function logout() {
+      location.reload();
+    }
+
+    async function editUser(id, oldUsername, oldEmail) {
+      const newUsername = prompt("Edit Username", oldUsername);
+      const newEmail = prompt("Edit Email", oldEmail);
+      if (newUsername && newEmail) {
+        const res = await fetch(`http://localhost:4000/api/updateuser/${id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: newUsername, email: newEmail })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert("User updated successfully");
+          fetchUsers();
+        } else {
+          alert(data.error);
+        }
+      }
+    }
+
+    async function registerUser() {
+      const username = document.getElementById("registerUsername").value;
+      const email = document.getElementById("registerEmail").value;
+      const password = document.getElementById("registerPassword").value;
+      const registerMessage = document.getElementById("registerMessage");
+
+      try {
+        const res = await fetch("http://localhost:4000/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok) {
+          registerMessage.textContent = "Registered successfully! Now login.";
+          setTimeout(() => {
+            flipCard();
+          }, 1200);
+        } else {
+          registerMessage.textContent = data.error || "Registration failed";
+        }
+      } catch (err) {
+        registerMessage.textContent = "Server error";
+      }
+    }
+  </script>
+</body>
+</html>
