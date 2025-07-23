@@ -1,4 +1,4 @@
-const productmodel=require('../model/productmodel');
+const productmodel=require('../model/productmodel');  /* in product controller */
 const usermodel=require('../model/usermodel');
 
 const createproduct=async(req,res)=>{

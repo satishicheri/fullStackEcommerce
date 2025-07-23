@@ -1,23 +1,29 @@
 const usermodel = require('../model/usermodel')
 const bcrypt=require('bcryptjs') // To secure password in the data base
 
- const registeruser = async (req, res) => {
+ const registeruser = async (req, res) => {  // registration function
     try {
-
+        
         let { username, email, password } = req.body;  //we are fetching from the reqbody
-        if (!username || !email || !password) {
-            return res.status(400).json({ error: 'user name ,email,password required compulsory' })
+        //^ we are fetching data from the reqbody{we need username,email,password}
+
+        if (!username || !email || !password) {  //after fetching  check condition required all feilds
+            return res.status(400).json({ error: 'user name ,email,password required compulsory' }) //pass required response
         }
 
         let user = await usermodel.findOne({ email }); //await waits and find email,when find then execute next
-        if (user) {
+        // ^ find email from the usermodel
+
+        if (user) { //if user exist give error
             return res.status(400).json({ error: 'user aleardy exist try new user' })
         }
+        
+        req.body.password=await bcrypt.hash(password,10) //saltround
+        // ^ we converting or hashing password 
 
-        req.body.password=await bcrypt.hash(password,10) //salt
-
-        let newuser=new usermodel(req.body)
-        await newuser.save() // it creates a new data or record in the database
+        let newuser=new usermodel(req.body) 
+        // ^ alerady user exist create new user (create object newuser) from the usermodelin reqbody
+        await newuser.save() // it creates a new data or record in the database or it saves the data in the database
 
         res.status(200).json({message:"user registered succesfully",user:newuser})
 
@@ -30,14 +36,15 @@ const bcrypt=require('bcryptjs') // To secure password in the data base
 }
 
 
-const login=async(req,res)=>{
+const login=async(req,res)=>{  // Login function 
     try{
-        const {email,password}=req.body;
-        if(!email || !password){
+        const {email,password}=req.body;  //fetching data from the reqbody and we need email and password
+
+        if(!email || !password){ // show all feild required
 
             return res.status(400).json({error:'email,password are required'})
         }
-        let user=await usermodel.findOne({email})
+        let user=await usermodel.findOne({email}) // retriving email from the user model
 
         if(!user){
             return res.status(400).json({error:'user is not found'});
@@ -85,7 +92,7 @@ const getuserbyemail=async(req,res)=>{
 
 }
 
-const updateuser=async(req,res)=>{    //update user
+const updateuser=async(req,res)=>{    //update user  
     try{
         const id=req.params.id;
         if(!id){

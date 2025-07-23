@@ -1,7 +1,7 @@
 const express=require('express')
 const router=express.Router();
 
-const{createproduct,getproduct ,getproductbyid,updateproduct,deletedproduct  }=require('../controller/productcontroller');
+const{createproduct,getproduct ,getproductbyid,updateproduct,deletedproduct}=require('../controller/productcontroller');
 
 
 
