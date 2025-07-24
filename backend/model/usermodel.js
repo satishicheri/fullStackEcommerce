@@ -6,6 +6,7 @@ const userschema = new mongoose.Schema({   //create one schema collection ,it re
     password: { type: String, required: true },
     contact: { type: Number },
     isadmin: { type: Boolean },
+    isblocked:{type:Boolean,default:false},
     createdAt: { type: Date, defaultmodule: Date.now },
     updatedAt: { type: Date, defaultmodule: Date.now }
 

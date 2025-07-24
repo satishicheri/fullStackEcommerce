@@ -22,6 +22,7 @@ const orderschema=new mongoose.Schema({
     },
     orderdate:{type:Date,default:Date.now},
     deliverydate:{type:Date},
+    iscancelled:{type:Boolean,default:false},
     shippingaddress:{type:String,required:true},
     createdAt:{type:Date,default:Date.now},
     updatedAt:{type:Date,default:Date.now} 
